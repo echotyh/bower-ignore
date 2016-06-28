@@ -1,0 +1,18 @@
+{
+  "in": {
+    "dependencies": {
+      "bootstrap": "^3.3.6",
+      "font-awesome": "fontawesome#^4.6.3",
+      "test": "^0.0.1"
+    },
+    "dependencies-gitignore": {
+      "bootstrap": {
+        "ignore": ["*"],
+        "unignore": ["dist/"]
+      },
+      "font-awesome": {}
+    }
+  },
+  "force": false,
+  "update": null
+}

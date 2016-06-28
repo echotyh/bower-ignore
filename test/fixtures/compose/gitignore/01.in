@@ -1,0 +1,10 @@
+{
+  "bowerDir": "bower_components",
+  "in": {
+    "bootstrap": {
+      "ignore": ["*"],
+      "unignore": ["dist/"]
+    },
+    "font-awesome": {}
+  }
+}

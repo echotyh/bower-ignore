@@ -1,0 +1,10 @@
+{
+  "bootstrap": {
+    "ignore": [],
+    "unignore": []
+  },
+  "font-awesome": {
+    "ignore": [],
+    "unignore": []
+  }
+}

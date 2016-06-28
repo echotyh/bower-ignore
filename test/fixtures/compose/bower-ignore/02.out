@@ -1,0 +1,14 @@
+{
+  "bootstrap": {
+    "ignore": ["*"],
+    "unignore": ["dist/"]
+  },
+  "font-awesome": {
+    "ignore": [],
+    "unignore": []
+  },
+  "test": {
+    "ignore": [],
+    "unignore": []
+  }
+}
