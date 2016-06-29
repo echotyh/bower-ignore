@@ -1,4 +1,6 @@
-# Bower Ignore - A simple CLI tool to `gitignore` useless files of bower dependencies
+# Bower Ignore 
+
+A simple CLI tool to `gitignore` useless files of bower dependencies
 
 [![Travis](https://img.shields.io/travis/mdluo/bower-ignore.svg?style=flat-square)](https://travis-ci.org/mdluo/bower-ignore)&nbsp;
 [![Coverage](https://img.shields.io/codecov/c/github/mdluo/bower-ignore.svg?style=flat-square)](https://codecov.io/github/mdluo/bower-ignore?branch=master)&nbsp;
