@@ -11,7 +11,7 @@ A simple CLI tool to `gitignore` useless files of bower dependencies
 ## Installation
 
 ``` bash
- $ npm install bower-ignore -g
+ npm install bower-ignore -g
 ```
 
 ## Usage
@@ -19,5 +19,5 @@ A simple CLI tool to `gitignore` useless files of bower dependencies
 **Example**
 
 ``` bash
- $ bower-ignore json -d
+ bower-ignore json -d
 ```
