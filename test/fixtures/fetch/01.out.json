@@ -4,11 +4,7 @@
     "unignore": ["dist/"]
   },
   "font-awesome": {
-    "ignore": [],
-    "unignore": []
-  },
-  "test": {
-    "ignore": [],
-    "unignore": []
+    "ignore": ["*"],
+    "unignore": ["test1", "test2"]
   }
 }

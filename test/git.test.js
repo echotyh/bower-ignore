@@ -51,10 +51,10 @@ describe('git', function() {
       it('should return error when readFile exception catched', function () {
         readFileSync = sinon.stub(fs, 'readFileSync');
         readFileSync.throws('ENOENT');
-        var res = git.setGitignore(['']);
+        (function() {
+          git.setGitignore(['']);
+         }).should.throw();
         readFileSync.restore();
-        res.should.be.instanceof(Error);
-        res.toString().should.equal('ENOENT');
       });
 
       describe('run fixtures', function() {
@@ -63,8 +63,8 @@ describe('git', function() {
         var fixturesIn = [];
         var fixturesOut = [];
         for (var i = 1; i <= fixtrueCount; i++) {
-          fixturesIn.push(fs.readFileSync('./test/fixtures/git/0'+i+'.in'));
-          fixturesOut.push(fs.readFileSync('./test/fixtures/git/0'+i+'.out').toString());
+          fixturesIn.push(fs.readFileSync('./test/fixtures/git/0'+i+'.in.gitignore'));
+          fixturesOut.push(fs.readFileSync('./test/fixtures/git/0'+i+'.out.gitignore').toString());
         }
 
         fixturesIn.map(function(item, i) {
@@ -93,7 +93,7 @@ describe('git', function() {
 
     describe('with argument and `.gitignore` does not exist', function() {
 
-      var fixtureOut = fs.readFileSync('./test/fixtures/git/no_gitignore.out').toString()
+      var fixtureOut = fs.readFileSync('./test/fixtures/git/no_gitignore.out.gitignore').toString()
 
       before(function () {
         existsSync = sinon.stub(fs, 'existsSync');
@@ -116,11 +116,11 @@ describe('git', function() {
         writeFileSync = sinon.stub(fs, 'writeFileSync');
         writeFileSync.throws('ENOENT');
 
-        var res = git.setGitignore(composedArr);
+        (function() {
+          git.setGitignore(['']);
+         }).should.throw();
         writeFileSync.restore();
 
-        res.should.be.instanceof(Error);
-        res.toString().should.equal('ENOENT');
       });
 
       after(function () {

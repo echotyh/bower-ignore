@@ -1,0 +1,12 @@
+{
+  "bowerDir": "bower_components",
+  "in": {
+    "dependencies-gitignore": {
+      "bootstrap": {
+        "ignore": ["*"],
+        "unignore": ["dist/"]
+      },
+      "font-awesome": {}
+    }
+  }
+}
