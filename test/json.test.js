@@ -89,7 +89,7 @@ describe('json', function() {
     });
 
     it('should return object when `bower.json` was correctly configured', function () {
-      var bowerJSON = {test: 'testVal'};
+      var bowerJSON = {dependencies: {test: 'testVal'}};
       readFileSync.withArgs(BOWER_JSON).returns(bowerJSON);
       var res = json.getBowerJSON();
       res.should.be.a('object');
