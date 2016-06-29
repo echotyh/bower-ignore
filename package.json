@@ -1,7 +1,7 @@
 {
   "name": "bower-ignore",
-  "version": "1.0.0",
-  "description": "Bower Ignore",
+  "version": "0.1.0",
+  "description": "A simple CLI tool to `gitignore` useless files of bower dependencies",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
