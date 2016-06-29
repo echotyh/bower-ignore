@@ -6,17 +6,17 @@ var ignore = require('../index');
 
 program
   .version(require('../package').version)
-  .usage('<cmd> [options]')
+  .usage('<cmd> [options] [packages...]')
 
 program
-  .command('json')
+  .command('json [packages...]')
   .alias('j')
   .description('add dependencies-gitignore to ' + chalk.cyan('bower.json') + ' and add blank ignore formulae')
   .option('-d, --download', 'set this option to download common bower components ignore formulae from GitHub')
   .option('-D, --debug', 'set this option to show error stack trace')
   .option('-f, --force', 'set this option to overwrite original components ignore formulae')
-  .action(function(option){
-    ignore.runJson(option.download, option.force, option.debug);
+  .action(function(packages, option){
+    ignore.runJson(option.download, option.force, option.debug, packages);
   });
 
 program
