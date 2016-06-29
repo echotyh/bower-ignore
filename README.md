@@ -6,18 +6,18 @@
 [![npm](https://david-dm.org/mdluo/bower-ignore.svg?style=flat-square)](https://www.npmjs.com/package/bower-ignore)&nbsp; [![npm](https://img.shields.io/npm/dt/bower-ignore.svg?style=flat-square)](https://www.npmjs.com/package/bower-ignore)&nbsp;
  [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/mdluo/bower-ignore/master/LICENSE)
 
- A simple CLI tool to `gitignore` useless files of bower dependencies
+A simple CLI tool to `gitignore` useless files of bower dependencies
 
- ## Installation
+## Installation
 
- ``` bash
-   $ npm install bower-ignore -g
- ```
+``` bash
+ $ npm install bower-ignore -g
+```
 
- ## Usage
+## Usage
 
- **Example**
+**Example**
 
- ``` bash
-   $ bower-ignore json -d
- ```
+``` bash
+ $ bower-ignore json -d
+```
