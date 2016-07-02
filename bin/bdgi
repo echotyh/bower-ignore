@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 
 var program = require('commander');
+var updateNotifier = require('update-notifier');
 var chalk = require('chalk');
+
+var pkg = require('../package');
 var ignore = require('../index');
 
+updateNotifier({pkg: pkg})
+    .notify({defer: false});
+
 program
-  .version(require('../package').version)
+  .version(pkg.version)
   .usage('<cmd> [options] [packages...]')
 
 program.on('--help', function(){
@@ -40,6 +46,7 @@ program
   });
 
 program.parse(process.argv);
+program.cli = true;
 
 if (!program.args.length) {
   program.help();
