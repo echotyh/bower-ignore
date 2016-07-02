@@ -1,6 +1,0 @@
-{
-  "out": [
-    "bower_components/bootstrap/*",
-    "!bower_components/bootstrap/dist/"
-  ]
-}

@@ -14,46 +14,49 @@ chai.use(sinonChai);
 
 var json = rewire("../lib/bower-ignore/json");
 
+var existsSync, readFileSync, writeFileSync;
+var BOWER_RC = json.__get__('BOWER_RC'),
+    BOWER_COMPONENTS = json.__get__('BOWER_COMPONENTS'),
+    BOWER_JSON = json.__get__('BOWER_JSON'),
+    BOWER_IGNORE = json.__get__('BOWER_IGNORE');
+
 describe('json', function() {
 
-  var existsSync, readFileSync, writeFileSync,
-      BOWER_RC = json.__get__('BOWER_RC'),
-      BOWER_COMPONENTS = json.__get__('BOWER_COMPONENTS'),
-      BOWER_JSON = json.__get__('BOWER_JSON'),
-      DEPS_IGNORE = json.__get__('DEPS_IGNORE');
+  beforeEach(function() {
+    existsSync = sinon.stub(fs, 'existsSync');
+    readFileSync = sinon.stub(jsonfile, 'readFileSync');
+    writeFileSync = sinon.stub(jsonfile, 'writeFileSync');
+  });
+
+  afterEach(function() {
+    existsSync.restore();
+    readFileSync.restore();
+    writeFileSync.restore();
+  });
 
   describe('#getBowerDir()', function() {
 
     describe('when there is no `.bowerrc`', function() {
 
-      beforeEach(function() {
-        existsSync = sinon.stub(fs, 'existsSync');
-        existsSync.withArgs(BOWER_RC).returns(false);
-      });
-
       it('should return "bower_components"', function () {
+        existsSync.withArgs(BOWER_RC).returns(false);
         var bowerDir = json.getBowerDir();
+        existsSync.restore();
         bowerDir.should.equal(BOWER_COMPONENTS);
       });
 
-      afterEach(function() {
-        existsSync.restore();
-      });
     });
 
     describe('when there is `.bowerrc`', function () {
 
       beforeEach(function() {
-        existsSync = sinon.stub(fs, 'existsSync');
-        readFileSync = sinon.stub(jsonfile, 'readFileSync');
         existsSync.withArgs(BOWER_RC).returns(true);
       });
 
-      it('should return "bower_components" when exception catched', function () {
+      it('should return "bower_components" when exception caught during readFileSync', function () {
         readFileSync.withArgs(BOWER_RC).throws('ENOENT');
-        (function() {
-          json.getBowerDir();
-         }).should.throw();
+        var bowerDir = json.getBowerDir();
+        bowerDir.should.equal(BOWER_COMPONENTS);
       });
 
       it('should return "bower_components" when no "directory" configured', function () {
@@ -68,70 +71,87 @@ describe('json', function() {
         bowerDir.should.equal('test_dir');
       });
 
-      afterEach(function() {
-        existsSync.restore();
-        readFileSync.restore();
-      });
     });
   });
 
-  describe('#getBowerJSON()', function() {
+  describe('#getBowerDeps()', function() {
 
-    beforeEach(function() {
-      readFileSync = sinon.stub(jsonfile, 'readFileSync');
-    });
-
-    it('should return error when exception catched', function () {
+    it('should return error when exception caught during readFileSync', function () {
       readFileSync.withArgs(BOWER_JSON).throws('ENOENT');
       (function() {
-        json.getBowerJSON();
+        json.getBowerDeps();
+       }).should.throw();
+    });
+
+    it('should return warning when no "dependencies" configured', function () {
+      readFileSync.withArgs(BOWER_JSON).returns({});
+      (function() {
+        json.getBowerDeps();
        }).should.throw();
     });
 
     it('should return object when `bower.json` was correctly configured', function () {
       var bowerJSON = {dependencies: {test: 'testVal'}};
       readFileSync.withArgs(BOWER_JSON).returns(bowerJSON);
-      var res = json.getBowerJSON();
-      res.should.be.a('object');
-      res.should.deep.equal(bowerJSON);
+      var bowerDeps = json.getBowerDeps();
+      bowerDeps.should.be.a('object');
+      bowerDeps.should.deep.equal(bowerJSON.dependencies);
     });
 
-    afterEach(function() {
-      readFileSync.restore();
-    });
   });
 
-  describe('#setBowerJSON()', function() {
+  describe('#getBowerIgnore()', function() {
 
-    beforeEach(function() {
-      writeFileSync = sinon.stub(jsonfile, 'writeFileSync');
-    });
-
-    it('should return null without parameters', function () {
-      var res = json.setBowerJSON();
-      res.should.equal(false);
-    });
-
-    it('should return error when exception catched', function () {
-      writeFileSync.throws('ENOENT');
+    it('should return error when exception caught during readFileSync', function () {
+      readFileSync.withArgs(BOWER_JSON).throws('ENOENT');
       (function() {
-        json.setBowerJSON(BOWER_JSON, {});
+        json.getBowerIgnore();
+       }).should.throw();
+    });
+
+    it('should return warning when no "dependencies-gitignore" configured', function () {
+      readFileSync.withArgs(BOWER_JSON).returns({});
+      (function() {
+        json.getBowerIgnore();
        }).should.throw();
     });
 
     it('should return object when `bower.json` was correctly configured', function () {
-      var bowerJSON = {test: 'testVal'};
-      writeFileSync.withArgs(BOWER_JSON, bowerJSON).returns();
-      var res = json.setBowerJSON(BOWER_JSON, bowerJSON);
-      res.should.equal(true);
+      var bowerJSON = {'dependencies-gitignore': {test: 'testVal'}};
+      readFileSync.withArgs(BOWER_JSON).returns(bowerJSON);
+      var bowerIgnore = json.getBowerIgnore();
+      bowerIgnore.should.be.a('object');
+      bowerIgnore.should.deep.equal(bowerJSON['dependencies-gitignore']);
     });
 
-    afterEach(function() {
-      writeFileSync.restore();
-    });
   });
 
-  describe('description', function() {
+  describe('#setBowerIgnore()', function() {
+
+    it('should return error when exception caught during readFileSync', function () {
+      readFileSync.withArgs(BOWER_JSON).throws('ENOENT');
+      (function() {
+        json.setBowerIgnore({});
+       }).should.throw();
+    });
+
+    it('should return error when exception caught during writeFileSync', function () {
+      writeFileSync.throws('ENOENT');
+      (function() {
+        json.setBowerIgnore({});
+       }).should.throw();
+    });
+
+    it('should return object when `bower.json` was correctly configured', function () {
+      var bowerIgnore = {test: 'val'};
+      var bowerJSON = {dependencies: {}};
+      readFileSync.withArgs(BOWER_JSON).returns(bowerJSON);
+      json.setBowerIgnore(bowerIgnore);
+      writeFileSync.should.have.been.calledWith(BOWER_JSON, {
+        dependencies: {},
+        'dependencies-gitignore': { test: "val" }
+      });
+    });
 
   });
 

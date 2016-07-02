@@ -1,0 +1,39 @@
+{
+  "args": {
+    "bowerDir": "bower_comp"
+  },
+  "in": {
+    "length": {
+      "ignore": ["test1"],
+      "unignore": ["test2"]
+    },
+    "prototype": {
+      "ignore": ["test1"],
+      "unignore": ["test2"]
+    },
+    "toString": {
+      "ignore": ["test1"],
+      "unignore": ["test2"]
+    },
+    "object": {
+      "ignore": ["test1"],
+      "unignore": ["test2"]
+    },
+    "__proto__": {
+      "ignore": ["test1"],
+      "unignore": ["test2"]
+    }
+  },
+  "out": [
+    "bower_comp/length/test1",
+    "!bower_comp/length/test2",
+    "bower_comp/prototype/test1",
+    "!bower_comp/prototype/test2",
+    "bower_comp/toString/test1",
+    "!bower_comp/toString/test2",
+    "bower_comp/object/test1",
+    "!bower_comp/object/test2",
+    "bower_comp/__proto__/test1",
+    "!bower_comp/__proto__/test2"
+  ]
+}

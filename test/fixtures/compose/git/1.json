@@ -1,0 +1,16 @@
+{
+  "args": {
+    "bowerDir": "bower_components"
+  },
+  "in": {
+    "bootstrap": {
+      "ignore": ["*"],
+      "unignore": ["dist/"]
+    },
+    "font-awesome": {}
+  },
+  "out": [
+    "bower_components/bootstrap/*",
+    "!bower_components/bootstrap/dist/"
+  ]
+}

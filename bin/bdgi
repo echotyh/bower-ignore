@@ -8,13 +8,24 @@ program
   .version(require('../package').version)
   .usage('<cmd> [options] [packages...]')
 
+program.on('--help', function(){
+  console.log('  Examples:');
+  console.log('');
+  console.log('    $ bdgi json -f                  ' + chalk.blue('reset all ignores in bower.json'));
+  console.log('    $ bdgi json -df                 ' + chalk.blue('download and reset all ignores in bower.json'));
+  console.log('    $ bdgi json jquery moment -d    ' + chalk.blue('only download and set ignores appeared in the [packages...] list'));
+  console.log('    $ bdgi git -D                   ' + chalk.blue('show error stack trace if any error caught'));
+  console.log('    $ bdgi json -d && bdgi git      ' + chalk.blue('all at one command'));
+  console.log('');
+});
+
 program
   .command('json [packages...]')
   .alias('j')
-  .description('add dependencies-gitignore to ' + chalk.cyan('bower.json') + ' and add blank ignore formulae')
-  .option('-d, --download', 'set this option to download common bower components ignore formulae from GitHub')
-  .option('-D, --debug', 'set this option to show error stack trace')
-  .option('-f, --force', 'set this option to overwrite original components ignore formulae')
+  .description('add and set "dependencies-gitignore" in ' + chalk.blue('bower.json'))
+  .option('-d, --download', 'download and set popular ignore formulae from GitHub')
+  .option('-D, --debug', 'show error stack trace')
+  .option('-f, --force', 'overwrite original ignores in bower.json')
   .action(function(packages, option){
     ignore.runJson(option.download, option.force, option.debug, packages);
   });
@@ -22,7 +33,7 @@ program
 program
   .command('git')
   .alias('g')
-  .description('add ignores and unignores to ' + chalk.cyan('.gitignore') + ' based on formulae in bower.json')
+  .description('add ignores and unignores to ' + chalk.blue('.gitignore') + ' based on ignores in bower.json')
   .option('-D, --debug', 'set this option to show error stack trace')
   .action(function(option){
     ignore.runGit(option.debug);

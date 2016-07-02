@@ -12,21 +12,22 @@ var chai = require("chai"),
 var should = chai.should();
 chai.use(sinonChai);
 
+var helper = require('./fixtures/git/helper');
 var git = rewire("../lib/bower-ignore/git");
 
-describe('git', function() {
+var existsSync, readFileSync, writeFileSync;
+var GITIGNORE = git.__get__('GITIGNORE'),
+    TIP = git.__get__('TIP'),
+    BEGIN = git.__get__('BEGIN'),
+    END = git.__get__('END');
+var gitIgnore = [
+  'bower_components/comp1/*',
+  '!bower_components/comp1/dist',
+  'bower_components/comp2/*',
+  '!bower_components/comp2/dist'
+];
 
-  var existsSync, readFileSync, writeFileSync;
-  var GITIGNORE = git.__get__('GITIGNORE'),
-      TIP = git.__get__('TIP'),
-      BEGIN = git.__get__('BEGIN'),
-      END = git.__get__('END');
-  var composedArr = [
-    'bower_components/comp1/*',
-    '!bower_components/comp1/dist',
-    'bower_components/comp2/*',
-    '!bower_components/comp2/dist'
-  ];
+describe('git', function() {
 
   describe('#setGitignore()', function() {
 
@@ -36,7 +37,7 @@ describe('git', function() {
         writeFileSync = sinon.spy(fs, 'writeFileSync');
         var res = git.setGitignore();
         writeFileSync.restore();
-        res.should.be.false;
+        (!!res).should.be.false;
         writeFileSync.should.have.callCount(0);
       });
     });
@@ -48,7 +49,7 @@ describe('git', function() {
         existsSync.withArgs(GITIGNORE).returns(true);
       });
 
-      it('should return error when readFile exception catched', function () {
+      it('should return error when readFile exception caught', function () {
         readFileSync = sinon.stub(fs, 'readFileSync');
         readFileSync.throws('ENOENT');
         (function() {
@@ -59,27 +60,18 @@ describe('git', function() {
 
       describe('run fixtures', function() {
 
-        var fixtrueCount = 5;
-        var fixturesIn = [];
-        var fixturesOut = [];
-        for (var i = 1; i <= fixtrueCount; i++) {
-          fixturesIn.push(fs.readFileSync('./test/fixtures/git/0'+i+'.in.gitignore'));
-          fixturesOut.push(fs.readFileSync('./test/fixtures/git/0'+i+'.out.gitignore').toString());
-        }
-
-        fixturesIn.map(function(item, i) {
-          it('should pass fixture-0' + (i+1), function () {
+        var fixtures = helper.getFixutres('common', '.gitignore');
+        fixtures.forEach(function(fixture, i) {
+          it('should pass fixture-' + (i+1), function () {
             readFileSync = sinon.stub(fs, 'readFileSync');
-            readFileSync.withArgs(GITIGNORE).returns(fixturesIn[i]);
+            readFileSync.withArgs(GITIGNORE).returns(fixture.in);
             writeFileSync = sinon.stub(fs, 'writeFileSync');
-            writeFileSync.returns();
 
-            var res = git.setGitignore(composedArr);
+            var res = git.setGitignore(gitIgnore);
             readFileSync.restore();
             writeFileSync.restore();
 
-            res.should.be.true;
-            writeFileSync.should.have.been.calledWith(GITIGNORE, fixturesOut[i]);
+            writeFileSync.should.have.been.calledWith(GITIGNORE, fixture.out);
           });
         });
 
@@ -91,28 +83,25 @@ describe('git', function() {
 
     });
 
-    describe('with argument and `.gitignore` does not exist', function() {
 
-      var fixtureOut = fs.readFileSync('./test/fixtures/git/no_gitignore.out.gitignore').toString()
+    describe('with argument and `.gitignore` does not exist', function() {
 
       before(function () {
         existsSync = sinon.stub(fs, 'existsSync');
         existsSync.withArgs(GITIGNORE).returns(false);
       });
 
-
+      var fixtures = helper.getFixutres('no-gitignore', '.gitignore');
       it('should write to `.gitignore` correctly', function () {
         writeFileSync = sinon.stub(fs, 'writeFileSync');
-        writeFileSync.returns();
 
-        var res = git.setGitignore(composedArr);
+        var res = git.setGitignore(gitIgnore);
         writeFileSync.restore();
 
-        res.should.be.true;
-        writeFileSync.should.have.been.calledWith(GITIGNORE, fixtureOut);
+        writeFileSync.should.have.been.calledWith(GITIGNORE, fixtures[0].out);
       });
 
-      it('should return error when writeFile exception catched', function () {
+      it('should return error when writeFile exception caught', function () {
         writeFileSync = sinon.stub(fs, 'writeFileSync');
         writeFileSync.throws('ENOENT');
 

@@ -1,4 +1,8 @@
 {
+  "args": {
+    "force": false,
+    "update": null
+  },
   "in": {
     "dependencies": {
       "bootstrap": "^3.3.6",
@@ -13,6 +17,18 @@
       "font-awesome": {}
     }
   },
-  "force": false,
-  "update": null
+  "out": {
+    "bootstrap": {
+      "ignore": ["*"],
+      "unignore": ["dist/"]
+    },
+    "font-awesome": {
+      "ignore": [],
+      "unignore": []
+    },
+    "test": {
+      "ignore": [],
+      "unignore": []
+    }
+  }
 }

@@ -11,31 +11,40 @@ chai.use(sinonChai);
 
 var jsonfile = require('jsonfile');
 
+var helper = require('./fixtures/helper');
 var json = require("../lib/bower-ignore/json");
 var compose = require("../lib/bower-ignore/compose");
 
 describe('compose', function () {
 
-  describe('#conposeBowerIgnore()', function () {
+  describe('#composeBowerIgnore()', function () {
 
-    it('should throw error when the first argument is null', function () {
-      (function() {
-        compose.conposeBowerIgnore();
-       }).should.throw();
+    var readFileSync;
+
+    beforeEach(function() {
+      readFileSync = sinon.stub(jsonfile, 'readFileSync');
     });
 
-    var fixtrueCount = 4;
-    var fixturesIn = [];
-    var fixturesOut = [];
-    for (var i = 1; i <= fixtrueCount; i++) {
-      fixturesIn.push(jsonfile.readFileSync('./test/fixtures/compose/bower-ignore/0'+i+'.in.json'));
-      fixturesOut.push(jsonfile.readFileSync('./test/fixtures/compose/bower-ignore/0'+i+'.out.json'));
-    }
+    afterEach(function() {
+      readFileSync.restore();
+    });
 
-    fixturesIn.map(function(item, i) {
-      it('should pass fixture-0' + (i+1), function () {
-        var res = compose.conposeBowerIgnore(item.in, item.force, item.update);
-        res.should.deep.equal(fixturesOut[i]);
+    it('should return blank object when the first argument is null', function () {
+      readFileSync.withArgs(json.BOWER_JSON).returns({});
+      var res = compose.composeBowerIgnore();
+      res.should.deep.equal({});
+    });
+
+    var fixtures = helper.getFixutres('compose/json', '.json');
+    fixtures.forEach(function (fixture, i) {
+      it('should pass fixture-' + (i+1), function () {
+        readFileSync.withArgs(json.BOWER_JSON).returns(fixture.in);
+
+        var res = compose.composeBowerIgnore(fixture.in.dependencies,
+                  fixture.args.force, fixture.args.update);
+
+        readFileSync.restore();
+        res.should.deep.equal(fixture.out);
       });
     });
   });
@@ -44,27 +53,20 @@ describe('compose', function () {
 
     it('should throw error when there is no "dependencies-gitignore"', function () {
       (function() {
-        compose.composeGitignore({});
+        compose.composeGitignore();
        }).should.throw();
     });
 
-    var fixtrueCount = 3;
-    var fixturesIn = [];
-    var fixturesOut = [];
-    for (var i = 1; i <= fixtrueCount; i++) {
-      fixturesIn.push(jsonfile.readFileSync('./test/fixtures/compose/gitignore/0'+i+'.in.json'));
-      fixturesOut.push(jsonfile.readFileSync('./test/fixtures/compose/gitignore/0'+i+'.out.json'));
-    }
-
-    fixturesIn.map(function(item, i) {
-      it('should pass fixture-0' + (i+1), function () {
+    var fixtures = helper.getFixutres('compose/git', '.json');
+    fixtures.forEach(function (fixture, i) {
+      it('should pass fixture-' + (i+1), function () {
         var getBowerDir = sinon.stub(json, 'getBowerDir');
-        getBowerDir.returns(item.bowerDir);
+        getBowerDir.returns(fixture.args.bowerDir);
 
-        var res = compose.composeGitignore(item.in);
+        var res = compose.composeGitignore(fixture.in);
+
         getBowerDir.restore();
-
-        res.should.deep.equal(fixturesOut[i].out);
+        res.should.deep.equal(fixture.out);
       });
     });
 

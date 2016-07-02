@@ -12,21 +12,23 @@ var jsonfile = require("jsonfile");
 var should = chai.should();
 chai.use(sinonChai);
 
+var helper = require('./fixtures/helper');
 var fetch = rewire("../lib/bower-ignore/fetch");
+
+var FORMULAE_PROTOCOL = fetch.__get__('FORMULAE_PROTOCOL'),
+    FORMULAE_HOST = fetch.__get__('FORMULAE_HOST'),
+    FORMULAE_BASE = fetch.__get__('FORMULAE_BASE'),
+    FORMULAE_EXT = fetch.__get__('FORMULAE_EXT');
+var getPackageName = fetch.__get__('getPackageName');
 
 describe('fetch', function () {
 
-  var FORMULAE_PROTOCOL = fetch.__get__('FORMULAE_PROTOCOL'),
-      FORMULAE_HOST = fetch.__get__('FORMULAE_HOST'),
-      FORMULAE_BASE = fetch.__get__('FORMULAE_BASE'),
-      FORMULAE_EXT = fetch.__get__('FORMULAE_EXT');
-  var getPackageName = fetch.__get__('getPackageName');
 
   describe('#fetchBowerIgnore()', function () {
 
     it('return undefined when dependencies is blank', function (done) {
-      fetch.fetchBowerIgnore({test1: "test1"}, function (res) {
-        (!res).should.be.true;
+      fetch.fetchBowerIgnore({}, function (res) {
+        (!!res).should.be.false;
         done();
       });
     });
@@ -44,30 +46,24 @@ describe('fetch', function () {
       });
     });
 
-    var fixtrueCount = 3;
-    var fixturesIn = [];
-    var fixturesOut = [];
-    for (var i = 1; i <= fixtrueCount; i++) {
-      fixturesIn.push(jsonfile.readFileSync('./test/fixtures/fetch/0'+i+'.in.json'));
-      fixturesOut.push(jsonfile.readFileSync('./test/fixtures/fetch/0'+i+'.out.json'));
-    }
-
-    fixturesIn.map(function(item, i) {
-      it('should pass fixture-0' + (i+1), function (done) {
+    var fixtures = helper.getFixutres('fetch', '.json');
+    fixtures.forEach(function(fixture, i) {
+      it('should pass fixture-' + (i+1), function (done) {
         var nockResponse = nock(FORMULAE_PROTOCOL + '://' + FORMULAE_HOST)
           .get(/[^]*/)
-          .times(3)
+          .times(Object.keys(fixture.in).length)
           .reply(function (uri) {
             var name = getPackageName(uri);
-            if (item.formulae[name]) {
-              return [200, item.formulae[name]];
+            var package = fixture.args.formulae[name];
+            if (package) {
+              return [200, package];
             }
             else {
               return [404, 'Not found'];
             }
           });
-        fetch.fetchBowerIgnore(item.in, function (res) {
-          res.should.deep.equal(fixturesOut[i]);
+        fetch.fetchBowerIgnore(fixture.in, function (res) {
+          res.should.deep.equal(fixture.out);
           done();
           nockResponse.done();
         });

@@ -1,0 +1,29 @@
+{
+  "args": {
+    "formulae": {
+      "bootstrap": {
+        "ignore": ["*"],
+        "unignore": ["dist/"]
+      },
+      "font-awesome": {
+        "ignore": ["*"],
+        "unignore": ["test1", "test2"]
+      }
+    }
+  },
+  "in": {
+    "bootstrap": "^3.3.6",
+    "font-awesome": "fontawesome#^4.6.3",
+    "test1": "^0.1.0"
+  },
+  "out": {
+    "bootstrap": {
+      "ignore": ["*"],
+      "unignore": ["dist/"]
+    },
+    "font-awesome": {
+      "ignore": ["*"],
+      "unignore": ["test1", "test2"]
+    }
+  }
+}

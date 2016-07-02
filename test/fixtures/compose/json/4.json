@@ -1,4 +1,17 @@
 {
+  "args": {
+    "force": true,
+    "update": {
+      "bootstrap": {
+        "ignore": ["test1"],
+        "unignore": ["test2/"]
+      },
+      "test": {
+        "ignore": ["test1"],
+        "unignore": ["test2"]
+      }
+    }
+  },
   "in": {
     "dependencies": {
       "bootstrap": "^3.3.6",
@@ -16,11 +29,14 @@
       }
     }
   },
-  "force": true,
-  "update": {
+  "out": {
     "bootstrap": {
       "ignore": ["test1"],
       "unignore": ["test2/"]
+    },
+    "font-awesome": {
+      "ignore": [],
+      "unignore": []
     },
     "test": {
       "ignore": ["test1"],

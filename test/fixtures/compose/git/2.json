@@ -1,0 +1,29 @@
+{
+  "args": {
+    "bowerDir": "bower_comp"
+  },
+  "in": {
+    "bootstrap": {
+      "ignore": [],
+      "unignore": ["test1", "test2"]
+    },
+    "font-awesome": {
+      "ignore": ["*"]
+    },
+    "test1": {
+      "unignore": ["*"]
+    },
+    "test2": {
+      "ignore": ["test1", "test2"],
+      "unignore": []
+    }
+  },
+  "out": [
+    "!bower_comp/bootstrap/test1",
+    "!bower_comp/bootstrap/test2",
+    "bower_comp/font-awesome/*",
+    "!bower_comp/test1/*",
+    "bower_comp/test2/test1",
+    "bower_comp/test2/test2"
+  ]
+}

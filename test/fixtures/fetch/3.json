@@ -1,0 +1,11 @@
+{
+  "args": {
+    "formulae": {}
+  },
+  "in": {
+    "bootstrap": "^3.3.6",
+    "font-awesome": "fontawesome#^4.6.3",
+    "test1": "^0.1.0"
+  },
+  "out": {}
+}
