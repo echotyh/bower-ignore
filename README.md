@@ -31,6 +31,8 @@ A simple CLI tool to `gitignore` useless files of [bower](https://bower.io/) dep
 
 * **formulae**: Collection of polular packages ignores, hosted on GitHub: [github.com/mdluo/bower-ignore-formulae](https://github.com/mdluo/bower-ignore-formulae)
 
+> Contribution wanted! [Go>>](https://github.com/mdluo/bower-ignore-formulae)
+
 ## Usage
 
 **Example**
