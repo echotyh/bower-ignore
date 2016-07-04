@@ -1,6 +1,6 @@
 {
   "name": "bower-ignore",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A simple CLI tool to `gitignore` useless files of bower dependencies",
   "keywords": [
     "bower",
