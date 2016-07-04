@@ -72,6 +72,8 @@ Download `jquery` and `moment` formulae and set. Skip if packages already exist 
  bdgi json jquery moment -d
 ```
 
+> **Sometimes you may need to edit the ignores part of your `bower.json` to meet your dependencies tree.
+
 Setup ignores in `bower.json` and add ignores and unignores to `.gitignore`:
 
 ``` bash
