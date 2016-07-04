@@ -8,6 +8,8 @@
 
 A simple CLI tool to `gitignore` useless files of [bower](https://bower.io/) dependencies
 
+![](http://i.imgur.com/hD5MLyf.png)
+
 ## Installation
 
 ``` bash
@@ -95,6 +97,14 @@ Options:
   -h, --help     output usage information
   -V, --version  output the version number
 ```
+
+## Future features
+
+* Resolve packages dependencies tree and add ignores automaticly.
+
+* Watch file change and take reactions.
+
+* Add version support to packages.
 
 ## Contributing
 
