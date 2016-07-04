@@ -8,7 +8,7 @@
 
 A simple CLI tool to `gitignore` useless files of [bower](https://bower.io/) dependencies
 
-![](http://i.imgur.com/hD5MLyf.png)
+![bdgi command flow chart](http://i.imgur.com/hD5MLyf.png)
 
 ## Installation
 
